@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
-use App\Http\Resources\UserResource;
+use App\Models\User;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class UserController extends Controller
 {
@@ -29,9 +31,14 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StoreUserRequest $request)
+
     {
-        $user = User::create($request->validated());
-        return new UserResource($user);
+        $validatedData = $request->validated();
+        $validatedData['password'] = bcrypt($validatedData['password']);
+
+       // $user = User::create($input);
+
+        return response()->json("Sucess",201);
     }
 
     /**
