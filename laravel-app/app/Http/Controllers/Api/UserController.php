@@ -33,11 +33,10 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
 
     {
-        $validatedData = $request->validated();
-        $validatedData['password'] = bcrypt($validatedData['password']);
+       // $validatedData = $request->validated();
+        //$validatedData['password'] = bcrypt($validatedData['password']);
 
        // $user = User::create($input);
-
         return response()->json("Sucess",201);
     }
 
