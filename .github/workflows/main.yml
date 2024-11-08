@@ -21,7 +21,11 @@ jobs:
         run: |
           cd laravel-app
           composer install --no-dev --optimize-autoloader
-
+      - name: Create .env
+        run: |
+          cd laravel-app
+          touch .env
+          echo "${{secrets.DOTENV}}" >> .env 
       - name: Generate key
         run: |
           cd laravel-app
