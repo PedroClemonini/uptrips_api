@@ -1,0 +1,7 @@
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^uptrips.api.simplifica.gru.br$ [NC,OR]
+RewriteCond %{HTTP_HOST} ^www.uptrips.api.simplifica.gru.br$
+RewriteCond %{REQUEST_URI} !public/
+RewriteRule (.*) /public/$1 [L]
+
+
