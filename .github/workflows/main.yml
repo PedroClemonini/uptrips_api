@@ -22,11 +22,6 @@ jobs:
           cd laravel-app
           composer install --no-dev --optimize-autoloader
 
-      - name: Copy .env
-        run: |
-          cd laravel-app
-          php -r "file_exists('.env') || copy('.env.example', '.env');"
-
       - name: Generate key
         run: |
           cd laravel-app
