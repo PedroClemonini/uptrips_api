@@ -11,10 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('destination', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->text('description');
+            $table->string('city');
+            $table->string('state');
+            $table->timestamps();
+        });
+
         Schema::create('hosting', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('type', array('Hotel', 'Hostel', 'Pousada', 'Airbnb', 'Resort'))->nullable(false)->change();
+            $table->enum('type', ['Hotel', 'Hostel', 'Pousada', 'Airbnb', 'Resort']);
             $table->string('phone');
             $table->string('email')->nullable(false);
             $table->integer('price');
@@ -30,5 +39,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('hosting');
+        Schema::dropIfExists('destination');
     }
 };

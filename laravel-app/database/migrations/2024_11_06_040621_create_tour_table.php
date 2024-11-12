@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('tour', function (Blueprint $table) {
             $table->id();
-            $table->integer('reservationId');
             $table->string('tourName');
             $table->text('description');
             $table->dateTime('duration');
