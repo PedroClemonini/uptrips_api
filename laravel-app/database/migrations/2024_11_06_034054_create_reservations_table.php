@@ -16,9 +16,7 @@ return new class extends Migration
             $table->date('tripDate');
             $table->date('startDate');
             $table->date('endDate');
-            $table->integer('packageId');
             $table->integer('totalPriceInCents');
-            $table->integer('customerId');
             $table->enum('status', array('Pending', 'Confirmed', 'Cancelled', 'InProgress', 'Completed'))->nullable()->change();
             $table->text('observations');
             $table->timestamps();

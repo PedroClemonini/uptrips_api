@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('boardingPlace');
             $table->string('landingPlace');
-            $table->integer('reservationsId');
-            $table->integer('transportId');
             $table->integer('numberReservation');
             $table->date('startDate');
             $table->date('endDate');

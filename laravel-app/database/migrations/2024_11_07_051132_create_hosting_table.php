@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->enum('type', array('Hotel', 'Hostel', 'Pousada', 'Airbnb', 'Resort'))->nullable(false)->change();
-            $table->integer('destinationId');
             $table->string('phone');
             $table->string('email')->nullable(false);
             $table->integer('price');
