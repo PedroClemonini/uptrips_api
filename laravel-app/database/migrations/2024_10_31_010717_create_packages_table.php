@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('packageName')->unique();
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
-            $table->integer('tripId');
             $table->date('startDate');
             $table->date('endDate');
             $table->integer('maxPeople');
