@@ -42,9 +42,10 @@ return new class () extends Migration {
             $table->date('startDate');
             $table->date('endDate');
             $table->integer('maxPeople');
+            $table->boolean('isActive')->default(true);
             $table->timestamps();
 
-            $table->foreignId('tripId')->constrained('trips')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('tripId')->constrained('trips')->onDelete('cascade');
         });
 
         Schema::create('reservations', function (Blueprint $table) {
@@ -69,9 +70,13 @@ return new class () extends Migration {
      */
     public function down(): void
     {
+        #Schema::disableForeignKeyConstraints();
+
         Schema::dropIfExists('reservations');
         Schema::dropIfExists('trips');
         Schema::dropIfExists('packages');
         Schema::dropIfExists('transport');
+
+        #Schema::enableForeignKeyConstraints();
     }
 };
