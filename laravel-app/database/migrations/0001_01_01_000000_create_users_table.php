@@ -2,15 +2,16 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
+
         Schema::create('level_user', function (Blueprint $table) {
             $table->id();
             $table->string('userDescription');
@@ -25,7 +26,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->foreignId('levelUser')->default(1)->constrained('level_user')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('levelUser')->default(2)->constrained('level_user')->onDelete('cascade')->onUpdate('cascade');
 
         });
 
