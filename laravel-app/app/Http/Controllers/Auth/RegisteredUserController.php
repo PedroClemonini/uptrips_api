@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Rules\Cpf;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -23,12 +24,20 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'phone' => ['required','string','max:14'],
+            'cpf' => ['required','string',new Cpf],
+            'rg' => ['required', 'max:14'],
+            'birth' => ['required', 'date','before:-18years'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
+            'cpf' => $request->cpf,
+            'rg' => $request->rg,
+            'birth' => $request->birth,
             'password' => Hash::make($request->string('password')),
             'levelUser' => 2,
         ]);

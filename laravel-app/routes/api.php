@@ -1,27 +1,27 @@
 <?php
 
+use App\Http\Controllers\Api\AccommodationController;
+use App\Http\Controllers\Api\TripPackagesController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\DestinationController;
+use App\Http\Controllers\Api\DestinationController;
+use App\Http\Middleware\adminUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\FeedbacksController;
-use App\Http\Controllers\HostingController;
+use App\Http\Controllers\Api\FeedbacksController;
+use App\Http\Controllers\Api\HostingController;
 use App\Http\Controllers\LevelUserController;
-use App\Http\Controllers\PackagesController;
-use App\Http\Controllers\ReservationsController;
-use App\Http\Controllers\TourController;
-use App\Http\Controllers\TransportController;
-use App\Http\Controllers\TripsController;
-use App\Models\Destination;
-use App\Models\Hosting;
-use App\Models\LevelUser;
-use App\Models\Packages;
-use App\Models\Reservations;
-use App\Models\Tour;
+use App\Http\Controllers\Api\PackagesController;
+use App\Http\Controllers\Api\ReservationController;
+use App\Http\Controllers\Api\TourController;
+use App\Http\Controllers\Api\TransportController;
+use App\Http\Controllers\Api\TripsController;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware(['auth:sanctum'])->get('users',[UserController::class, 'index'])->middleware(adminUser::class);
+
 
 Route::prefix('feedbacks')->group(function () {
     Route::get('/', [FeedbacksController::class, 'index']);
@@ -33,7 +33,7 @@ Route::prefix('feedbacks')->group(function () {
 
 Route::prefix('destination')->group(function () {
     Route::get('/', [DestinationController::class, 'index']);
-    Route::post('/', [DestinationController::class, 'store']);
+    Route::middleware(['auth:sanctum'])->post('/', [DestinationController::class, 'store'])->middleware(adminUser::class);
     Route::get('/{destination}', [DestinationController::class, 'show']);
     Route::put('/{destination}', [DestinationController::class, 'update']);
     Route::delete('/{destination}', [DestinationController::class, 'destroy']);
@@ -47,6 +47,14 @@ Route::prefix('hosting')->group(function () {
     Route::delete('/{hosting}', [HostingController::class, 'destroy']);
 });
 
+Route::prefix('accommodation')->group(function () {
+    Route::get('/{hosting}',[HostingController::class,'index']);
+    //Route::get('/{accommodation}',[AccommodationController::class,'show']);
+    Route::put('/{accomodation}',[AccommodationController::class,'update']);
+    Route::post('/',[AccommodationController::class,'store']);
+    Route::delete('/{accomodation}', [AccommodationController::class,'destroy']);
+});
+
 Route::prefix('levelUser')->group(function () {
     Route::get('/', [LevelUserController::class, 'index']);
     Route::post('/', [LevelUserController::class, 'store']);
@@ -56,11 +64,11 @@ Route::prefix('levelUser')->group(function () {
 });
 
 Route::prefix('reservations')->group(function () {
-    Route::get('/', [ReservationsController::class, 'index']);
-    Route::post('/', [ReservationsController::class, 'store']);
-    Route::get('/{reservations}', [ReservationsController::class, 'show']);
-    Route::put('/{reservations}', [ReservationsController::class, 'update']);
-    Route::delete('/{reservations}', [ReservationsController::class, 'destroy']);
+    Route::get('/', [ReservationController::class, 'index']);
+    Route::post('/', [ReservationController::class, 'store']);
+    Route::get('/{reservations}', [ReservationController::class, 'show']);
+    Route::put('/{reservations}', [ReservationController::class, 'update']);
+    Route::delete('/{reservations}', [ReservationController::class, 'destroy']);
 });
 
 Route::prefix('tour')->group(function () {
@@ -71,20 +79,12 @@ Route::prefix('tour')->group(function () {
     Route::delete('/{tour}', [TourController::class, 'destroy']);
 });
 
-Route::prefix('transport')->group(function () {
-    Route::get('/', [TransportController::class, 'index']);
-    Route::post('/', [TransportController::class, 'store']);
-    Route::get('/{transport}', [TransportController::class, 'show']);
-    Route::put('/{transport}', [TransportController::class, 'update']);
-    Route::delete('/{transport}', [TransportController::class, 'destroy']);
-});
 
-Route::prefix('trips')->group(function () {
-    Route::get('/', [TripsController::class, 'index']);
-    Route::post('/', [TripsController::class, 'store']);
-    Route::get('/{trips}', [TripsController::class, 'show']);
-    Route::put('/{trips}', [TripsController::class, 'update']);
-    Route::delete('/{trips}', [TripsController::class, 'destroy']);
+Route::prefix('packages')->group(function () {
+    Route::get('/', [TripPackagesController::class, 'index']);
+    Route::post('/', [TripPackagesController::class, 'store']);
+    Route::get('/{trips}', [TripPackagesController::class, 'show']);
+    Route::put('/{trips}', [TripPackagesController::class, 'update']);
+    Route::delete('/{trips}', [TripPackagesController::class, 'destroy']);
 });
-
 

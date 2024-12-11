@@ -24,6 +24,10 @@ return new class () extends Migration {
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('phone');
+            $table->string('cpf');
+            $table->string('rg');
+            $table->date('birth');
             $table->rememberToken();
             $table->timestamps();
             $table->foreignId('levelUser')->default(2)->constrained('level_user')->onDelete('cascade')->onUpdate('cascade');

@@ -7,6 +7,8 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Log;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -27,12 +29,18 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): Response
     {
-        Auth::guard('web')->logout();
+        try {
+            Auth::guard('web')->logout();
 
-        $request->session()->invalidate();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            Cookie::queue(Cookie::forget('laravel_session'));
+            Log::info('Logout executado com sucesso');
 
-        $request->session()->regenerateToken();
-
-        return response()->noContent();
+            return response()->noContent();
+        } catch (\Exception $e) {
+            Log::error('Erro ao fazer logout: ' . $e->getMessage());
+            return response()->json(['error' => 'Erro interno ao fazer logout'], 500);
+        }
     }
 }

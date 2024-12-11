@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Destination;
 
 class Hosting extends Model
 {
@@ -14,14 +13,17 @@ class Hosting extends Model
 
     protected $fillable = [
         'name',
-        'type',
-        'phone',
-        'email',
-        'price',
-        'destination_id'
+        'description',
+        'contact_phone',
+        'contact_email',
+        'document',
+        'address',
+        'destination_id',
     ];
-    public function destination(){
+
+    public function destination()
+    {
         return $this->belongsTo(Destination::class);
     }
-
 }
+

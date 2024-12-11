@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Feedbacks;
 use Exception;
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\Controller;
 class FeedbacksController extends Controller
 {
     /**
