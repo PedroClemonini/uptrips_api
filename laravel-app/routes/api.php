@@ -46,7 +46,7 @@ Route::prefix('hosting')->group(function () {
 
 Route::prefix('accommodation')->group(function () {
     Route::get('/{hosting}',[HostingController::class,'index']);
-    //Route::get('/{accommodation}',[AccommodationController::class,'show']);
+    Route::get('/id/{accommodation}',[AccommodationController::class,'show']);
     Route::put('/{accomodation}',[AccommodationController::class,'update']);
     Route::post('/',[AccommodationController::class,'store']);
     Route::delete('/{accomodation}', [AccommodationController::class,'destroy']);
