@@ -25,5 +25,14 @@ class Accommodation extends Model
     {
         return $this->belongsTo(Hosting::class);
     }
-}
 
+    public function reservations()
+    {
+        return $this->belongsToMany(
+            Reservation::class,              // Modelo relacionado
+            'reservation_accommodations',    // Nome da tabela pivot
+            'accommodation_id',              // Chave estrangeira para a tabela `accommodations`
+            'reservation_id'                 // Chave estrangeira para a tabela `reservations`
+        );
+    }
+}

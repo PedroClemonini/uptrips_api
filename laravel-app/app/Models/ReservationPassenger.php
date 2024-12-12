@@ -22,10 +22,9 @@ class ReservationPassenger extends Model
         'reservation_id',
     ];
 
-    // Relacionamento com a tabela 'reservation' (um passageiro pertence a uma reserva)
     public function reservation()
     {
-        return $this->belongsTo(Reservation::class);
+        return $this->belongsTo(Reservation::class, 'reservation_id');
     }
 }
 

@@ -37,6 +37,15 @@ return new class () extends Migration {
             $table->string('image6_path')->nullable()->change();
             $table->string('image7_path')->nullable()->change();
         });
+
+        Schema::table('reservation', function(Blueprint $table){
+            $table->date('payment_date')->nullable()->change();
+            $table->enum('status',['awaiting_payment','payed','canceled'])->default('awaiting_payment')->change();
+        });
+
+        Schema::table('reservationTour', function (Blueprint $table){
+            $table->dropColumn('price');
+        });
     }
 
     /**

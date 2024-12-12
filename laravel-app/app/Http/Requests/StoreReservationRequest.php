@@ -22,8 +22,8 @@ class StoreReservationRequest extends FormRequest
         return [
         'childs' => 'required|integer',
         'adults' => 'required|integer',
-        'status' => 'string|in:awaiting_payment,payed,canceled',
-        'payment_date' => 'nullable|date',
+        'trip_package_id' => 'required|exists:trip_package,id',
+        'user_id' => 'required|exists:users,id',
         'accommodations' => 'array',
         'accommodations.*.id' => 'nullable|integer|exists:accommodation,id',
         'accommodations.*.accommodation_price' => 'required|numeric',
@@ -34,8 +34,8 @@ class StoreReservationRequest extends FormRequest
         'passengers.*.age' => 'required|integer',
         'tours' => 'array',
         'tours.*.id' => 'nullable|integer|exists:tour,id',
-        'tours.*.tour_child_value' => 'required|numeric',
-        'tours.*.tour_adult_value' => 'required|numeric',
+        'tours.*.quantity_child' => 'required|integer',
+        'tours.*.quantity_adult' => 'required|integer',
         ];
     }
 }

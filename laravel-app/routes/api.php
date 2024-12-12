@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AccommodationController;
+use App\Http\Controllers\Api\ReservationController;
 use App\Http\Controllers\Api\TripPackagesController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\DestinationController;
@@ -10,11 +11,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\FeedbacksController;
 use App\Http\Controllers\Api\HostingController;
 use App\Http\Controllers\LevelUserController;
-use App\Http\Controllers\Api\PackagesController;
-use App\Http\Controllers\Api\ReservationController;
 use App\Http\Controllers\Api\TourController;
-use App\Http\Controllers\Api\TransportController;
-use App\Http\Controllers\Api\TripsController;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
@@ -63,7 +60,7 @@ Route::prefix('levelUser')->group(function () {
     Route::delete('/{levelUser}', [LevelUserController::class, 'destroy']);
 });
 
-Route::prefix('reservations')->group(function () {
+Route::prefix('reservation')->group(function () {
     Route::get('/', [ReservationController::class, 'index']);
     Route::post('/', [ReservationController::class, 'store']);
     Route::get('/{reservations}', [ReservationController::class, 'show']);

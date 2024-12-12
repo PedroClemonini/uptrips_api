@@ -15,7 +15,8 @@ class TripPackagesController extends Controller
      */
     public function index()
     {
-        //
+        $response = TripPackage::all();
+        return response()->json($response,201);
     }
 
     /**
@@ -56,7 +57,7 @@ class TripPackagesController extends Controller
      */
     public function show(TripPackage $TripPackages)
     {
-        //
+
     }
 
     /**
