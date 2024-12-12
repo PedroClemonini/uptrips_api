@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\levelUserSeeder;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -48,7 +49,11 @@ return new class () extends Migration {
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+        $seeder = new levelUserSeeder();
+        $seeder->run();
     }
+
+
 
     /**
      * Reverse the migrations.
