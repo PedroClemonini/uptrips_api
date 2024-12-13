@@ -1,0 +1,26 @@
+<?php
+
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Accommodation>
+ */
+class AccommodationFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'name' => fake()->company(),
+            'description' => fake()->text(),
+            'price' => fake()->randomFloat(),
+            'hosting_id' => \App\Models\Hosting::factory()
+        ];
+    }
+}

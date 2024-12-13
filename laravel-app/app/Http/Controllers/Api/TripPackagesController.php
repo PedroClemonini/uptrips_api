@@ -70,13 +70,6 @@ class TripPackagesController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(TripPackage $TripPackages)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

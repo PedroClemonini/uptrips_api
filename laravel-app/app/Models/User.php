@@ -51,7 +51,13 @@ class User extends Authenticatable
         ];
     }
 
-    public function levelUser(){
+    public function levelUser()
+    {
         return $this->belongsTo(LevelUser::class);
+    }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
     }
 }
