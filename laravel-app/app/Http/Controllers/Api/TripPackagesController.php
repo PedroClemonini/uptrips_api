@@ -33,7 +33,18 @@ class TripPackagesController extends Controller
         try {
 
             $package = DB::transaction(function () use ($request) {
-                return TripPackage::create($request->validated());
+                $data = $request->validated();
+
+                for ($i = 0; $i < 7; $i++) {
+                    $imageKey = "image{$i}_path";
+                    if ($request->hasFile($imageKey)) {
+                        $image = $request->file($imageKey);
+                        $path = $image->store('images', 'public');
+                        $data[$imageKey] = $path;
+                    }
+                }
+
+                return TripPackage::create($data);
             });
 
             return response()->json([
@@ -52,19 +63,13 @@ class TripPackagesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(TripPackage $tripPackages)
+    public function show(TripPackage $packages)
     {
         try {
-            if ($tripPackages != null) {
-                return response()->json($tripPackages, 200);
-            } else {
-                return response()->json([
-                    'message' => 'An error occured while retrieving the hosting',
-                ], 404);
-            }
-        } catch (Exception $e) {
+            return response()->json($packages, 200);
+        } catch (\Exception $e) {
             return response()->json([
-                'message' => 'An error occured while retrieving the feedback',
+                'message' => 'An error occured while retrieving the tripPackages',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -74,25 +79,24 @@ class TripPackagesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TripPackage $tripPackage)
+    public function update(Request $request, TripPackage $packages)
     {
         $data = $request->validated();
 
-        DB::transaction(function () use ($tripPackage, $data) {
-            $tripPackage->update($data);
+        DB::transaction(function () use ($packages, $data) {
+            $packages->update($data);
         });
-        return response()->json(['message' => 'TripPackage Updated Sucessfully', 'trip' => $tripPackage]);
-
+        return response()->json(['message' => 'TripPackage Updated Sucessfully', 'trip' => $packages]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TripPackage $tripPackages)
+    public function destroy(TripPackage $packages)
     {
         try {
-            DB::transaction(function () use ($tripPackages) {
-                $tripPackages->delete();
+            DB::transaction(function () use ($packages) {
+                $packages->delete();
             });
             return response()->json([
                 'message' => 'Trip deleted successfully',
