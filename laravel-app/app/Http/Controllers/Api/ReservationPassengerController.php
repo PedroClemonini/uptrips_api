@@ -13,7 +13,16 @@ class ReservationPassengerController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $data = reservationPassenger::all();
+            return response()->json($data, 201);
+        } catch (\Exception $e) {
+            // Retorne uma mensagem amigável em caso de erro
+            return response()->json([
+                'message' => 'There is no reservation for this passenger',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**

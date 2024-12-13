@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAccommodationRequest;
 use App\Models\Accommodation;
 use App\Models\Hosting;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,13 +19,13 @@ class AccommodationController extends Controller
     {
         try {
             var_dump($hosting_id->id);
-          //  $accommodations = Accommodation::where('hosting_id', $hosting_id->id)->get();
-           // return response()->json($accommodations);
-        } catch(\Exception $e) {
+            //  $accommodations = Accommodation::where('hosting_id', $hosting_id->id)->get();
+            // return response()->json($accommodations);
+        } catch (\Exception $e) {
             return response()->json([
-                       'message' => 'An error occurred while retrieving accommodations',
-                       'error' => $e->getMessage(),
-                   ], 500);
+                'message' => 'An error occurred while retrieving accommodations',
+                'error' => $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -59,8 +60,7 @@ class AccommodationController extends Controller
     {
         try {
             return response()->json($accommodation, 200);
-
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => 'An error occured while retrieving the feedback',
                 'error' => $e->getMessage()
@@ -73,7 +73,12 @@ class AccommodationController extends Controller
      */
     public function update(Request $request, Accommodation $accommodation)
     {
-        //
+        $data = $request->validated();
+
+        DB::transaction(function () use ($accommodation, $data) {
+            $accommodation->update($data);
+        });
+        return response()->json(['message' => 'Accommodation Updated Sucessfully', 'accommodation' => $accommodation]);
     }
 
     /**
@@ -81,6 +86,19 @@ class AccommodationController extends Controller
      */
     public function destroy(Accommodation $accommodation)
     {
-        //
+       try{
+            DB::transaction(function () use ($accommodation){
+                $accommodation->delete();
+            });
+            return response()->json([
+                'message' => 'Accommodation deleted successfully',
+            ], 200);
+        }catch(Exception $e){
+            return response()->json([
+                'message' => 'Failed to delete accommodation',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+
     }
 }
