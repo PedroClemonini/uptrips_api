@@ -15,8 +15,8 @@ class FeedbacksController extends Controller
     {
         try{
             $feedbacks = Feedbacks::all();
-
             return response()->json($feedbacks);
+
         }catch(Exception $e){
             return response()->json([
                 'error' => 'An error occurred when try to return this',

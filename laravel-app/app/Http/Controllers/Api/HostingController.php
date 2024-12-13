@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreHostingRequest;
 use App\Models\Hosting;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +16,7 @@ class HostingController extends Controller
      */
     public function index()
     {
-       try{
+        try {
             $data = Hosting::all();
             return response()->json($data, 201);
         } catch (\Exception $e) {
@@ -25,7 +26,6 @@ class HostingController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
-
     }
 
     /**
@@ -58,7 +58,6 @@ class HostingController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
-
     }
 
     /**
@@ -66,15 +65,21 @@ class HostingController extends Controller
      */
     public function show(Hosting $hosting)
     {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Hosting $hosting)
-    {
-        //
+        try {
+            if ($hosting != null) {
+                return response()->json($hosting, 200);
+            } else {
+                return response()->json([
+                    'message' => 'An error occured while retrieving the hosting',
+                ], 404);
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'An error occured while retrieving the feedback',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -82,7 +87,12 @@ class HostingController extends Controller
      */
     public function update(Request $request, Hosting $hosting)
     {
-        //
+        $data = $request->validated();
+
+        DB::transaction(function () use ($hosting, $data) {
+            $hosting->update($data);
+        });
+        return response()->json(['message' => 'Hosting Updated Sucessfully', 'hosting' => $hosting]);
     }
 
     /**
@@ -90,6 +100,18 @@ class HostingController extends Controller
      */
     public function destroy(Hosting $hosting)
     {
-        //
+        try {
+            DB::transaction(function () use ($hosting) {
+                $hosting->delete();
+            });
+            return response()->json([
+                'message' => 'Hosting deleted successfully',
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Failed to delete hosting',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

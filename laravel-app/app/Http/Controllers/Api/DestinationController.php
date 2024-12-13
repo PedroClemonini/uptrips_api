@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDestinationRequest;
 use App\Models\Destination;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -69,10 +70,15 @@ class DestinationController extends Controller
      */
     public function show(Destination $destination)
     {
-        try{
-            return response()->json($destination, 200);
-
-        }catch(\Exception $e){
+         try {
+            if ($destination != null) {
+                return response()->json($destination, 200);
+            } else {
+                return response()->json([
+                    'message' => 'An error occured while retrieving the hosting',
+                ], 404);
+            }
+        } catch (Exception $e) {
             return response()->json([
                 'message' => 'An error occured while retrieving the feedback',
                 'error' => $e->getMessage()
@@ -83,8 +89,20 @@ class DestinationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Destination $Destination)
+    public function destroy(Destination $destination)
     {
-        //
+        try{
+            DB::transaction(function () use ($destination){
+                $destination->delete();
+            });
+            return response()->json([
+                'message' => 'Destination deleted successfully',
+            ], 200);
+        }catch(Exception $e){
+            return response()->json([
+                'message' => 'Failed to delete destination',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }
