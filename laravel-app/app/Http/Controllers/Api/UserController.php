@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
+use App\Models\Reservation;
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\View\View;
@@ -16,25 +17,22 @@ class UserController extends Controller
      */
     public function index()
     {
-        try{
+        try {
             $user = User::all();
             return response()->json($user);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json([
                 'error' => 'An error occurred when try to return this',
                 'message' => $e->getMessage()
             ], 500);
         }
-
     }
 
     /**
      * Show the form for creating a new resource.
      * @return View
      */
-    public function create()
-    {
-    }
+    public function create() {}
 
 
 
@@ -71,16 +69,15 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        try{
-            if(!$user) {
+        try {
+            if (!$user) {
                 return response()->json([
                     'message' => 'User not found'
                 ], 404);
             }
 
             return response()->json($user, 201);
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json([
                 'message' => 'An error occured while retrieving the user',
                 'error' => $e->getMessage()
@@ -88,7 +85,7 @@ class UserController extends Controller
         }
     }
 
-    /**
+       /**
      * Show the form for editing the specified resource.
      * @return View
      */
@@ -109,11 +106,11 @@ class UserController extends Controller
             'levelUser' => 'nullable|exists:level_user,id',
         ]);
 
-        if(isset($data['password'])){
+        if (isset($data['password'])) {
             $data['password'] = bcrypt($data['password']);
         }
 
-         try{
+        try {
             if (!$user) {
                 return response()->json([
                     'message' => 'Hosting not found'
@@ -127,17 +124,12 @@ class UserController extends Controller
                 'message' => 'User updated succesfully',
                 'user' => $user,
             ], 201);
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json([
                 'message' => 'An error occured while retrieving the User',
                 'error' => $e->getMessage()
             ], 500);
         }
-
-
-
-
     }
 
     /**
@@ -145,21 +137,19 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        try{
-            if(!$user){
-                return response()->json(['message'=>'User not found'], 404);
+        try {
+            if (!$user) {
+                return response()->json(['message' => 'User not found'], 404);
             }
             $user->delete();
             return response()->json([
                 'message' => 'User deleted successfully',
-            ],201);
-
-        }catch(Exception $e){
+            ], 201);
+        } catch (Exception $e) {
             return response()->json([
                 'message' => 'An error occured while retrieving the User',
                 'error' => $e->getMessage()
             ], 500);
         }
-
     }
 }

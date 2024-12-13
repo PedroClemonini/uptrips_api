@@ -38,7 +38,7 @@ class Reservation extends Model
                 'user_id' => $data['user_id']
             ]);
 
-            if(isset($data['accommodations'])) {
+            if (isset($data['accommodations'])) {
                 foreach ($data['accommodations'] as $accommodation) {
                     $accommodationModel = Accommodation::find($accommodation['id']);
 
@@ -46,14 +46,13 @@ class Reservation extends Model
                         $reservation->accommodations()->attach($accommodationModel->id, [
                             'accommodation_price' => $accommodationModel->price,
                         ]);
-
                     }
                 }
             }
-            if(isset($data['tours'])) {
+            if (isset($data['tours'])) {
                 foreach ($data['tours'] as $tour) {
                     $tourModel = Tour::find($tour['id']);
-                    if($tourModel) {
+                    if ($tourModel) {
                         $reservation->tours()->attach($tourModel->id, [
                             'tour_child_value' =>   $tourModel->child_value * $tour['quantity_child'],
                             'tour_adult_value' =>   $tourModel->adult_value * $tour['quantity_adult'],
@@ -90,7 +89,7 @@ class Reservation extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function accommodations()

@@ -21,9 +21,16 @@ class Hosting extends Model
         'destination_id',
     ];
 
+    protected $guarded = ['id'];
+
+    public function accommodations()
+    {
+        return $this->hasMany(Accommodation::class, 'hosting_id');
+
+    }
+
     public function destination()
     {
         return $this->belongsTo(Destination::class);
     }
 }
-

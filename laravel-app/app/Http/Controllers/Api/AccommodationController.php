@@ -15,12 +15,19 @@ class AccommodationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Hosting $hosting_id)
+    public function index($hosting_id)
     {
         try {
-            var_dump($hosting_id->id);
-            //  $accommodations = Accommodation::where('hosting_id', $hosting_id->id)->get();
-            // return response()->json($accommodations);
+            $hosting = Hosting::findOrFail($hosting_id);
+            $data = $hosting->accommodations;
+
+            if ($data->isEmpty()) {
+                return response()->json([
+                    'message' => 'No accommodations found for this hosting',
+                ], 404);
+            }
+
+            return response()->json($data, 200);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'An error occurred while retrieving accommodations',
@@ -86,19 +93,18 @@ class AccommodationController extends Controller
      */
     public function destroy(Accommodation $accommodation)
     {
-       try{
-            DB::transaction(function () use ($accommodation){
+        try {
+            DB::transaction(function () use ($accommodation) {
                 $accommodation->delete();
             });
             return response()->json([
                 'message' => 'Accommodation deleted successfully',
             ], 200);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json([
                 'message' => 'Failed to delete accommodation',
                 'error' => $e->getMessage(),
             ], 500);
         }
-
     }
 }

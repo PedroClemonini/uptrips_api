@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreReservationRequest;
 use App\Models\Reservation;
+use App\Models\User;
 use Exception;
 use Illuminate\Container\Attributes\Log;
 use Illuminate\Database\QueryException;
@@ -81,13 +82,35 @@ class ReservationController extends Controller
                 return response()->json($reservation, 200);
             } else {
                 return response()->json([
-                    'message' => 'An error occured while retrieving the hosting',
+                    'message' => 'An error occured while retrieving the reservation',
                 ], 404);
             }
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'An error occured while retrieving the feedback',
+                'message' => 'An error occured while retrieving the reservations',
                 'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function showReservation($userId)
+    {
+        try {
+            $user = User::findOrFail($userId);
+
+            $reservations = $user->reservations;
+
+            if ($reservations->isEmpty()) {
+                return response()->json([
+                    'message' => 'No reservations found for this user',
+                ], 404);
+            }
+
+            return response()->json($reservations, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while retrieving reservations',
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
@@ -111,19 +134,18 @@ class ReservationController extends Controller
      */
     public function destroy(Reservation $reservation)
     {
-         try{
-            DB::transaction(function () use ($reservation){
+        try {
+            DB::transaction(function () use ($reservation) {
                 $reservation->delete();
             });
             return response()->json([
                 'message' => 'Reservation deleted successfully',
             ], 200);
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json([
                 'message' => 'Failed to delete reservation',
                 'error' => $e->getMessage(),
             ], 500);
         }
-
     }
 }
