@@ -29,14 +29,6 @@ class HostingController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreHostingRequest $request)
@@ -85,7 +77,7 @@ class HostingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Hosting $hosting)
+    public function update(StoreHostingRequest $request, Hosting $hosting)
     {
         $data = $request->validated();
 
